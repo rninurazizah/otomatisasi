@@ -6,6 +6,7 @@ def run_etl():
     
     # 1. Read (Extract)
     raw_path = "data/raw_data.csv"
+    output_path = "data/clean_data.csv"
     if not os.path.exists(raw_path):
         print(f"File {raw_path} tidak ditemukan!")
         return
