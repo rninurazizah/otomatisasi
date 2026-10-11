@@ -1,0 +1,30 @@
+name: Deploy Web ke GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+
+# Memberikan izin ke workflow untuk mendeploy ke Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Kode
+        uses: actions/checkout@v4
+
+      - name: Upload Artifact Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' # Lokasi folder file HTML/CSS/JS kamu
+
+      - name: Deploy ke GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
