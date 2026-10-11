@@ -1,0 +1,41 @@
+name: ETL & Data Cleaning Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+    # Workflow hanya berjalan jika ada perubahan pada folder data atau skrip ETL
+    paths:
+      - 'data/*.csv'
+      - 'etl_script.py'
+      - '.github/workflows/etl-pipeline.yml'
+  
+  # Izinkan menjalankan workflow secara manual dari tab Actions
+  workflow_dispatch:
+
+jobs:
+  process-etl:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip' # Mempercepat build berikutnya dengan caching dependensi
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run ETL Script
+        run: python etl_script.py
+
+      - name: Commit and Push Hasil Cleaned Data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "auto(etl): update cleaned data csv via github actions"
+          file_pattern: 'data/clean_data.csv'
