@@ -20,7 +20,8 @@ def run_etl():
     df_clean = df.dropna().drop_duplicates()
     
     # Contoh: Rapikan nama kolom (huruf kecil & hapus spasi)
-    df_clean.columns = [col.strip().lower().replace(" ", "_") for colModel in df_clean.columns]
+    # Perbaikan: sesuaikan variabel pemanggil dan variabel perulangannya
+    df_clean.columns = [col.strip().lower().replace(" ", "_") for col in df_clean.columns]
 
     # 3. Load (Save Result)
     output_path = "data/clean_data.csv"
